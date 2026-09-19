@@ -1,0 +1,8 @@
+{
+  "_comment": "p95 latency ceilings (seconds) for `python -m bench --ci`. Set generously (~8-10x observed p95) so shared CI runners do not flap; the CLI adds a further tolerance band (default 25%). These guard against gross regressions, not micro-noise. Observed p95 on the M6 baseline dev machine is in the comment beside each.",
+  "emit_event":            { "p95_seconds": 0.020 },
+  "event_backfill_replay": { "p95_seconds": 0.100 },
+  "memory_recall_fts":     { "p95_seconds": 0.030 },
+  "runs_list":             { "p95_seconds": 0.020 },
+  "run_end_to_end_echo":   { "p95_seconds": 0.500 }
+}

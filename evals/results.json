@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-09-19T01:02:44.021002+00:00",
+  "results": [
+    {
+      "id": "single_task",
+      "category": "single-task",
+      "passed": true,
+      "status": "done",
+      "model_calls": 2,
+      "tool_calls": 0,
+      "steps": 2,
+      "answer_excerpt": "Paris is the capital of France.",
+      "failures": []
+    },
+    {
+      "id": "multi_task",
+      "category": "multi-task",
+      "passed": true,
+      "status": "done",
+      "model_calls": 4,
+      "tool_calls": 0,
+      "steps": 4,
+      "answer_excerpt": "Synthesized: Lake A (500) is larger than Lake B (300).",
+      "failures": []
+    },
+    {
+      "id": "tool_use",
+      "category": "tool-use",
+      "passed": true,
+      "status": "done",
+      "model_calls": 3,
+      "tool_calls": 1,
+      "steps": 3,
+      "answer_excerpt": "The result is 42.",
+      "failures": []
+    },
+    {
+      "id": "retry_then_accept",
+      "category": "retry",
+      "passed": true,
+      "status": "done",
+      "model_calls": 5,
+      "tool_calls": 0,
+      "steps": 5,
+      "answer_excerpt": "Revenue grew 12% to $4.2M in Q3.",
+      "failures": []
+    },
+    {
+      "id": "replan",
+      "category": "replan",
+      "passed": true,
+      "status": "done",
+      "model_calls": 9,
+      "tool_calls": 0,
+      "steps": 9,
+      "answer_excerpt": "Synthesized final over t0 and t2.",
+      "failures": []
+    },
+    {
+      "id": "partial_abort",
+      "category": "partial",
+      "passed": true,
+      "status": "failed",
+      "model_calls": 5,
+      "tool_calls": 0,
+      "steps": 5,
+      "answer_excerpt": "\u26a0\ufe0f This run did not complete successfully. The following is a partial answer bas",
+      "failures": []
+    },
+    {
+      "id": "retry_exhaustion_fails",
+      "category": "failure",
+      "passed": true,
+      "status": "failed",
+      "model_calls": 5,
+      "tool_calls": 0,
+      "steps": 5,
+      "answer_excerpt": "",
+      "failures": []
+    },
+    {
+      "id": "memory_lift",
+      "category": "memory",
+      "passed": true,
+      "status": "done",
+      "model_calls": 0,
+      "tool_calls": 0,
+      "steps": 2,
+      "answer_excerpt": "A writes a lesson; B recalls it",
+      "failures": []
+    }
+  ]
+}
