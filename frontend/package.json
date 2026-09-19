@@ -1,0 +1,30 @@
+{
+  "name": "atlas-frontend",
+  "version": "0.7.0",
+  "private": true,
+  "description": "ATLAS frontend — Run, History/Replay and Memory pages (M7: release).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "gen:api": "openapi-typescript ./openapi.json -o ./lib/generated/schema.ts"
+  },
+  "dependencies": {
+    "next": "^14.2.35",
+    "openapi-fetch": "^0.13.8",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.20",
+    "openapi-typescript": "^7.13.0",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.14",
+    "typescript": "5.6.3"
+  }
+}
