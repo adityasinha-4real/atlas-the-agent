@@ -1,0 +1,53 @@
+# ATLAS local stack: Ollama (local model) + FastAPI backend + Next.js frontend.
+#
+# First run (pull the model once Ollama is up):
+#   docker compose up -d ollama
+#   docker compose exec ollama ollama pull qwen2.5:7b-instruct
+#   docker compose up --build
+#
+# To run without a GPU/model, set ATLAS_LLM_PROVIDER=echo on the backend service.
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      ATLAS_ENVIRONMENT: production
+      ATLAS_LLM_PROVIDER: ollama
+      ATLAS_LLM_MODEL: qwen2.5:7b-instruct
+      ATLAS_LLM_BASE_URL: http://ollama:11434
+      ATLAS_CORS_ORIGINS: http://localhost:3000
+      ATLAS_DATABASE_URL: sqlite+aiosqlite:////app/data/atlas.db
+    volumes:
+      - atlas-data:/app/data
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  ollama-models:
+  atlas-data:

@@ -1,0 +1,14 @@
+# Model-free override: run ATLAS in Docker with the deterministic `echo` provider,
+# so no Ollama container, GPU, or model download is needed.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.echo.yml up --build backend frontend
+#
+# Naming `backend frontend` keeps the ollama service from starting. The echo
+# provider plans a single task equal to the goal and answers it directly; the full
+# multi-task flow needs the default Ollama stack (see docker-compose.yml).
+
+services:
+  backend:
+    environment:
+      ATLAS_LLM_PROVIDER: echo
+    depends_on: !reset {}
