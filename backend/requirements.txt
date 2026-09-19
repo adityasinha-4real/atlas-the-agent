@@ -1,0 +1,14 @@
+# ATLAS backend runtime dependencies.
+# Floors chosen so prebuilt wheels exist for CPython 3.14 (no source builds).
+# Plain uvicorn + pure-Python websockets avoids Rust-based [standard] extras.
+fastapi>=0.115,<1.0
+uvicorn>=0.34,<1.0
+websockets>=14,<16
+pydantic>=2.11,<3.0
+pydantic-settings>=2.7,<3.0
+SQLAlchemy>=2.0.40,<2.1
+aiosqlite>=0.20,<1.0
+httpx>=0.28,<1.0
+# M2 tools: web_search (ddgs) and web_fetch HTML extraction (lxml).
+ddgs>=9.0,<10
+lxml>=5.0,<7

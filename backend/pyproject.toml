@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlas-backend"
+version = "0.7.0"
+description = "ATLAS — a hand-built agentic AI runtime (plan, act, reflect, recover)."
+requires-python = ">=3.11"
+readme = "README.md"
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "uvicorn>=0.34,<1.0",
+    "websockets>=14,<16",
+    "pydantic>=2.11,<3.0",
+    "pydantic-settings>=2.7,<3.0",
+    "SQLAlchemy>=2.0.40,<2.1",
+    "aiosqlite>=0.20,<1.0",
+    "httpx>=0.28,<1.0",
+    "ddgs>=9.0,<10",
+    "lxml>=5.0,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3,<9",
+    "pytest-asyncio>=0.25,<1.0",
+    "pytest-cov>=6.0,<8",
+    "ruff>=0.9",
+]
+
+[project.scripts]
+atlas = "atlas.main:main"
+
+[tool.setuptools.packages.find]
+include = ["atlas*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    # pytest-asyncio uses the deprecated event-loop policy API on py3.14.
+    "ignore:'asyncio.set_event_loop_policy' is deprecated:DeprecationWarning",
+    "ignore:'asyncio.get_event_loop_policy' is deprecated:DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 90
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ANN"]
+# ANN401: allow typed-Any where pragmatic. B008: Depends() in defaults is the
+# idiomatic FastAPI dependency-injection pattern, not a bug.
+ignore = ["ANN401", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]

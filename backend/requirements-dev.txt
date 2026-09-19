@@ -1,0 +1,7 @@
+# ATLAS backend development/test dependencies.
+# Floors chosen so prebuilt wheels exist for CPython 3.14.
+-r requirements.txt
+pytest>=8.3,<9
+pytest-asyncio>=0.25,<1.0
+pytest-cov>=6.0,<8
+ruff>=0.9
