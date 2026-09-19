@@ -1,0 +1,106 @@
+# ATLAS CI — every guarantee the milestones make, enforced on every push (RFC-0004 §22).
+#
+# The whole pipeline runs model-free: agent logic is driven by the `echo` provider
+# and the scripted FakeLLM, so CI never needs Ollama (ADR-0006, ADR-0020).
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+# Least privilege: CI only reads the tree and uploads artifacts; it never
+# writes to the repo, so no write scopes are granted.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: backend (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Windows + Linux proves cross-platform determinism (RFC-0004 §16).
+        os: [ubuntu-latest, windows-latest]
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install (wheels only — no build toolchain, no Ollama)
+        run: "python -m pip install --only-binary=:all: -r requirements-dev.txt"
+
+      - name: Lint (ruff)
+        run: python -m ruff check atlas tests
+
+      - name: Test + coverage floor
+        # Doc-lint (version/config parity) rides along as test_docs_parity.py.
+        run: python -m pytest --cov=atlas --cov-report=term-missing --cov-fail-under=85
+
+      - name: OpenAPI drift gate — committed schema matches the app
+        # Linux only: the schema is platform-independent, and LF checkout keeps
+        # the diff byte-exact.
+        if: runner.os == 'Linux'
+        run: |
+          python -m scripts.dump_openapi
+          git diff --exit-code -- ../frontend/openapi.json
+
+      - name: Benchmarks — CI subset + threshold guard
+        working-directory: .
+        run: python -m bench --ci
+
+      - name: Evals — golden scorecard (scripted, deterministic)
+        working-directory: .
+        run: python -m evals
+
+      - name: Upload bench + eval artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-${{ matrix.os }}
+          path: |
+            bench/out/
+            evals/scorecard.md
+            evals/results.json
+          if-no-files-found: ignore
+
+  frontend:
+    name: frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Generated client drift gate — schema.ts matches openapi.json
+        run: |
+          npm run gen:api
+          git diff --exit-code -- lib/generated/schema.ts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
