@@ -1,0 +1,12 @@
+[
+  {"type": "run.created", "payload": {"goal": "goal that gets cancelled"}},
+  {"type": "run.started", "payload": {}},
+  {"type": "plan.created", "payload": {"tasks": [
+    {"id": "r:0", "index": 0, "description": "first"},
+    {"id": "r:1", "index": 1, "description": "second"}
+  ]}},
+  {"type": "task.started", "payload": {"task_id": "r:0", "index": 0}},
+  {"type": "task.completed", "payload": {"task_id": "r:0", "index": 0, "output": "first done"}},
+  {"type": "task.cancelled", "payload": {"task_id": "r:1", "index": 1, "phase": "execution"}},
+  {"type": "run.cancelled", "payload": {}}
+]

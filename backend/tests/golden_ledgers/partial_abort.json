@@ -1,0 +1,14 @@
+[
+  {"type": "run.created", "payload": {"goal": "goal that partially fails"}},
+  {"type": "run.started", "payload": {}},
+  {"type": "plan.created", "payload": {"tasks": [
+    {"id": "r:0", "index": 0, "description": "works"},
+    {"id": "r:1", "index": 1, "description": "fails"}
+  ]}},
+  {"type": "task.started", "payload": {"task_id": "r:0", "index": 0}},
+  {"type": "task.completed", "payload": {"task_id": "r:0", "index": 0, "output": "done work"}},
+  {"type": "task.started", "payload": {"task_id": "r:1", "index": 1}},
+  {"type": "task.failed", "payload": {"task_id": "r:1", "index": 1, "error": "could not complete"}},
+  {"type": "answer.completed", "payload": {"text": "PARTIAL: only the first step"}},
+  {"type": "run.failed", "payload": {"error": "Task 2 could not be completed"}}
+]

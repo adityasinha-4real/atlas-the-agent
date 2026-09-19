@@ -1,0 +1,14 @@
+[
+  {"type": "run.created", "payload": {"goal": "two step goal"}},
+  {"type": "run.started", "payload": {}},
+  {"type": "plan.created", "payload": {"tasks": [
+    {"id": "r:0", "index": 0, "description": "first task"},
+    {"id": "r:1", "index": 1, "description": "second task"}
+  ]}},
+  {"type": "task.started", "payload": {"task_id": "r:0", "index": 0}},
+  {"type": "task.completed", "payload": {"task_id": "r:0", "index": 0, "output": "alpha"}},
+  {"type": "task.started", "payload": {"task_id": "r:1", "index": 1}},
+  {"type": "task.completed", "payload": {"task_id": "r:1", "index": 1, "output": "bravo"}},
+  {"type": "answer.completed", "payload": {"text": "the final answer"}},
+  {"type": "run.completed", "payload": {}}
+]
